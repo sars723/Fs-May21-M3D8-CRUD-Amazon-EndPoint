@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+      crossorigin="anonymous"
+    />
+
+    <title>CRUD endpoint Amazon</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">CRUD endpoint Amazon</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">
+              Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./backoffice.html">BackOffice</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <div id="product-wrapper" class="row mt-5"></div>
+    </div>
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      let productId = urlParams.get("id");
+      console.log(productId);
+      const divToDisplayProducts = document.getElementById("product-wrapper");
+      const displayProducts = (product) => {
+        divToDisplayProducts.innerHTML += ` <div  class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="card" ">
+                                <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text"><span class="product-description">Product Name=></span>${product.name}</p>
+                                    <p class="card-text"><span class="product-description">Product Description=></span>${product.description}</p>
+                                    <p class="card-text"><span class="product-description">Product Brand=></span>${product.brand}</p>
+                                    <p class="card-text"><span class="product-description">Product Price=></span>${product.price}</p>
+                                    <button type="button" id="${product._id}" class="btn btn-secondary" onclick="deletee(event)">Go somewhere</button>
+                                    <a href="./backoffice.html?id=${product._id}" class="btn btn-primary">Go somewhere</a>
+                                </div>
+            </div>
+                            </div>`;
+      };
+
+      const fetchProducts = async () => {
+        /*  const URL = " https://striveschool-api.herokuapp.com/api/product/"; */
+        try {
+          let response = await fetch(
+            "https://striveschool-api.herokuapp.com/api/product/" + productId,
+            {
+              headers: {
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGFlM2YzMGNlYWY0ODAwMTVjOTE4NjkiLCJpYXQiOjE2MjUwMjYxOTIsImV4cCI6MTYyNjIzNTc5Mn0.PsxaF5WqdL3M99ArdsNnDDq7wUtiPxw_4Nn-WRpsftI",
+              },
+            }
+          );
+          const fetchedProduct = await response.json();
+          let result = await displayProducts(fetchedProduct);
+          console.log(fetchedProduct);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      window.onload = async () => {
+        fetchProducts();
+      };
+    </script>
+  </body>
+</html>
