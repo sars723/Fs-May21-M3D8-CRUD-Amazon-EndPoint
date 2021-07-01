@@ -19,7 +19,7 @@
     <title>CRUD endpoint Amazon</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">CRUD endpoint Amazon</a>
       <button
         class="navbar-toggler"
@@ -46,7 +46,13 @@
         </ul>
       </div>
     </nav>
-    <div class="container">
+    <img
+      class="img-fluid"
+      src="https://www.lyngblomsten.org/files/6615/9846/5287/Homepage_banner-01.jpg"
+      alt=""
+      style="height: 30vh; width: 100%; object-fit: cover"
+    />
+    <div class="container mb-5">
       <div id="product-wrapper" class="row mt-5"></div>
     </div>
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
@@ -63,39 +69,45 @@
 
     <script>
       const divToDisplayProducts = document.getElementById("product-wrapper");
-      const deletee = async (e) => {
-        /*  const deleteBtn = document.querySelector(".delete-btn"); */
-        /*     deleteBtn.addEventListener("click", async (e) => { */
+
+      const deleteProduct = async (e) => {
         let id = e.target.id;
         console.log(id);
-        const response = await fetch(
-          "https://striveschool-api.herokuapp.com/api/product/" + id,
-          {
-            method: "delete",
-            headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGFlM2YzMGNlYWY0ODAwMTVjOTE4NjkiLCJpYXQiOjE2MjUwMjYxOTIsImV4cCI6MTYyNjIzNTc5Mn0.PsxaF5WqdL3M99ArdsNnDDq7wUtiPxw_4Nn-WRpsftI",
-            },
-          }
-        );
-        /*  }); */
+
+        try {
+          const response = await fetch(
+            "https://striveschool-api.herokuapp.com/api/product/" + id,
+            {
+              method: "delete",
+              headers: {
+                Authorization:
+                  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGFlM2YzMGNlYWY0ODAwMTVjOTE4NjkiLCJpYXQiOjE2MjUwMjYxOTIsImV4cCI6MTYyNjIzNTc5Mn0.PsxaF5WqdL3M99ArdsNnDDq7wUtiPxw_4Nn-WRpsftI",
+              },
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        } finally {
+          location.reload();
+        }
       };
+
       const displayProducts = (products) => {
         products.forEach((product) => {
           divToDisplayProducts.innerHTML += ` <div  class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <div class="card" ">
-                                <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>
-                                    <p class="card-text"><span class="product-description">Product Name=></span>${product.name}</p>
-                                    <p class="card-text"><span class="product-description">Product Description=></span>${product.description}</p>
-                                    <p class="card-text"><span class="product-description">Product Brand=></span>${product.brand}</p>
-                                    <p class="card-text"><span class="product-description">Product Price=></span>${product.price}</p>
-                                    <button type="button" id="${product._id}" class="btn btn-secondary" onclick="deletee(event)">Go somewhere</button>
-                                    <a href="./details.html?id=${product._id}" class="btn btn-primary">Go somewhere</a>
-                                </div>
-            </div>
-                            </div>`;
+                             <div class="card" ">
+                                 <img src="${product.imageUrl}" class="card-img-top" alt="${product.name}">
+                                 <div class="card-body">
+                                     <h5 class="card-title">${product.name}</h5>
+                                     <p class="card-text"><span class="product-description">Product Name=></span>${product.name}</p>
+                                     <p class="card-text"><span class="product-description">Product Description=></span>${product.description}</p>
+                                     <p class="card-text"><span class="product-description">Product Brand=></span>${product.brand}</p>
+                                     <p class="card-text"><span class="product-description">Product Price=></span>${product.price}€</p>
+                                     <button type="button" id="${product._id}" class="btn btn-secondary mb-3" onclick="deleteProduct(event)">Delete Product</button>
+                                     <a href="./details.html?id=${product._id}" class="btn btn-primary">Read More</a>
+                                 </div>
+             </div>
+                             </div>`;
         });
         return true;
       };
